@@ -6,16 +6,36 @@ public class Day2 {
     static int[] memory;
 
     public static void main(String[] args) {
-        memory = getMemory();
-        restoreToPreviousState();
-        runProgram();
-        System.out.println("The value left at position 0 is " + memory[0]);
+        int noun, verb = 0;
+        boolean success = false;
+        for (noun = 0; noun < 100; noun++) {
+            for (verb = 0; verb < 100; verb++) {
+                instructionPointer = -1;
+                memory = getMemory();
+                restoreToPreviousState(noun, verb);
+                runProgram();
+                if (isSuccess()) {
+                    success = true;
+                    break;
+                }
+            }
+            if (success) {
+                System.out.println("The value left at position 0 is " + memory[0] + " For noun " + noun + " verb " + verb);
+                break;
+            }
+        }
+        int result = 100 * noun + verb;
+        System.out.println("The value of 100 * noun + verb is " + result);
+    }
+
+    private static boolean isSuccess() {
+        return memory[0] == 19690720;
     }
 
     private static void runProgram() {
         while (instructionPointer < memory.length - 3) {
             int opcode = getNextParameter();
-            if(opcode == 99) {
+            if (opcode == 99) {
                 System.out.println("Stopping because got halting instruction");
                 break;
             } else {
@@ -26,11 +46,11 @@ public class Day2 {
 
     private static void runInstruction(int opcode) {
         int res;
-        if (opcode == 1){
+        if (opcode == 1) {
             res = memory[getNextParameter()] + memory[getNextParameter()];
-        }else if (opcode == 2){
+        } else if (opcode == 2) {
             res = memory[getNextParameter()] * memory[getNextParameter()];
-        }else {
+        } else {
             return;
         }
         memory[getNextParameter()] = res;
@@ -49,8 +69,8 @@ public class Day2 {
                 5, 111, 115, 1, 2, 115, 119, 1, 119, 6, 0, 99, 2, 0, 14, 0};
     }
 
-    private static void restoreToPreviousState() {
-        memory[1] = 12;
-        memory[2] = 2;
+    private static void restoreToPreviousState(int noun, int verb) {
+        memory[1] = noun;
+        memory[2] = verb;
     }
 }

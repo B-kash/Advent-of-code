@@ -78,6 +78,15 @@ public class Day3 {
         System.out.println("Took: " + (end - start)/ 1000000000 + " seconds");
         System.out.println("min distance is " + minDistance);
 
+        int minCost = 0;
+        for(Point point: intersectionPoints){
+            int costForPoint = wire1.traverse(point) + wire2.traverse(point);
+            if(minCost == 0 || costForPoint < minCost){
+                minCost = costForPoint;
+            }
+        }
+
+        System.out.println("The min cost to get to the intersection is " + minCost);
 
     }
 

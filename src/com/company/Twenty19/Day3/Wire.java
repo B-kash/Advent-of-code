@@ -49,4 +49,17 @@ public class Wire {
         }
         return result;
     }
+
+    public int traverse(Point point){
+        int cost = 0;
+        for(Line line: this.lines){
+            if (line.contains(point)){
+                cost += line.getStartingPoint().distance(point);
+                break;
+            } else {
+                cost += line.getSteps();
+            }
+        }
+        return cost;
+    }
 }

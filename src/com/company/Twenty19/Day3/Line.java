@@ -1,12 +1,14 @@
 package com.company.Twenty19.Day3;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Line {
     private Point startingPoint;
     private int steps;
     private Direction direction;
-    private ArrayList<Point> path = new ArrayList<>(); // will be calculated later
+    private Map<String, Point> path = new HashMap<String, Point>(); // will be calculated later
     private Point endPoint;
 
     public Line(Point startingPoint, int steps, Direction direction) {
@@ -16,11 +18,15 @@ public class Line {
         createPath();
     }
 
+    public Point getStartingPoint() {
+        return startingPoint;
+    }
+
     private void createPath() {
         Point lastKnownEndPoint = null;
         for (int i = 0; i <= steps; i++) {
             lastKnownEndPoint = new Point(startingPoint.getX() + i * getCalculatedMultiplier("x"), startingPoint.getY() + i * getCalculatedMultiplier("y"));
-            path.add(lastKnownEndPoint);
+            this.path.put(String.valueOf(i), lastKnownEndPoint);
         }
         endPoint = lastKnownEndPoint;
     }
@@ -53,27 +59,31 @@ public class Line {
 
     }
 
+    public int getSteps() {
+        return steps;
+    }
+
     public Point getEndPoint() {
         return endPoint;
     }
 
 
-    public ArrayList<Point> getPath() {
+    public Map<String, Point> getPath() {
         return path;
     }
 
     public ArrayList<Point> intersect(Line anotherLine) {
         ArrayList<Point> result = new ArrayList<>();
-        for (Point point : this.getPath()) {
-            for (Point anotherPoint : anotherLine.getPath()) {
-                if (point.distance(anotherPoint) == 0) {
-                    result.add(point);
-                }
-
+        anotherLine.path.forEach((key,value)->{
+            if(this.path.containsValue(value)){
+                result.add(value);
             }
-        }
+        });
         return result;
     }
 
+    public boolean contains(Point point) {
+        return this.path.containsValue(point);
+    }
 }
 
